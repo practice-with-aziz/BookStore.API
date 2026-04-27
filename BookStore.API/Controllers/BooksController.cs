@@ -67,5 +67,18 @@ namespace BookStore.API.Controllers
             await _context.SaveChangesAsync();
             return Ok(findBook);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteBook(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
+
+            if (book is null)
+                return NotFound($"the book with ID {id} does not exists");
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
