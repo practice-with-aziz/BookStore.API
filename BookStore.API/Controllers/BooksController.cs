@@ -46,5 +46,26 @@ namespace BookStore.API.Controllers
 
             return CreatedAtAction(nameof(GetBookById), new {id = book.BookId}, book);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Book>> UpdateBook(int id, Book book)
+        {
+            if(id != book.BookId)
+            {
+                return BadRequest("route id and body id does not match");
+            }
+            var findBook = await _context.Books.FindAsync(id);
+            if(findBook == null)
+            {
+                return NotFound($"the book with ID {id} could not be find, hence it cannot be updated");
+            }
+            findBook.Title = book.Title;
+            findBook.Author = book.Author;
+            findBook.Price = book.Price;
+            findBook.Genre = book.Genre;
+
+            await _context.SaveChangesAsync();
+            return Ok(findBook);
+        }
     }
 }
