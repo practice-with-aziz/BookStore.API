@@ -1,11 +1,13 @@
 ﻿using BookStore.API.Data;
 using BookStore.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
 
     public class BooksController : ControllerBase
@@ -68,6 +70,7 @@ namespace BookStore.API.Controllers
             return Ok(findBook);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBook(int id)
         {
